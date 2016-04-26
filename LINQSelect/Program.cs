@@ -33,16 +33,44 @@ namespace LINQSelect
             //For Custom Select
             //var someselectSequence = sequence.Select(n => n.ToString());
 
-            //For Generic Custom Select
-            var someselectSequence = sequence.Where(n => n % 5 == 0).Select((n, index) =>
-                      new
-                      {
-                          index = ++index,
-                          formatedResult = n.ToString().PadLeft(20)
-                      });
-            foreach (var item in someselectSequence)
-                Console.WriteLine(item.index + "." + item.formatedResult);
+            //For Generic Custom Select// Map
+            //var someselectSequence = sequence.Where(n => n % 5 == 0).Select((n, index) =>
+            //          new
+            //          {
+            //              index = ++index,
+            //              formatedResult = n.ToString().PadLeft(20)
+            //          });
+            //foreach (var item in someselectSequence)
+            //    Console.WriteLine(item.index + "." + item.formatedResult);
+            //Console.ReadLine();
+
+            //starting Reduce Function
+
+            //starting Any Implemetation
+
+            //var input = MyLinqImplementation.SequenceFromConsole();
+            //foreach (var item in input)
+            //    Console.WriteLine("\t" + item);
+            //Console.ReadLine();
+
+            //var input = MyLinqImplementation.SequenceFromConsole().Any();
+            //Console.WriteLine("\t" + input);
+
+            //Console.WriteLine(MyLinqImplementation.SequenceFromConsole().Any(s => s.Contains("hello")));
+            //Console.WriteLine(MyLinqImplementation.SequenceFromConsole().Any(s => s!=null && s.Contains("hello")));
+            //Console.ReadLine();
+            //return;
+
+            //Console.ReadLine();
+            //any implemetation ends here
+
+            //Count Implementation Starts
+            var input = MyLinqImplementation.SequenceFromConsole();
+            Console.WriteLine(input.Count());
             Console.ReadLine();
+            //Count Implementation Ends
+
+            //end Reduce Function
         }
 
         public static IEnumerable<int> GenerateNumbers()
@@ -56,6 +84,13 @@ namespace LINQSelect
 
     public static class MyLinqImplementation
     {
+        public static int Count<T>(this IEnumerable<T> source)
+        {
+            int finalCount = 0;
+            foreach (var item in source)
+                finalCount++;
+            return finalCount;
+        }
         public static IEnumerable<T> Where<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             foreach (T item in source)
@@ -84,5 +119,29 @@ namespace LINQSelect
             }
             Console.WriteLine("Using Generic Implementation Ends");
         }
+
+        public static IEnumerable<string> SequenceFromConsole()
+        {
+            string text = default(string);
+            //if (!string.IsNullOrEmpty(text))
+            //{
+                while (text != "done")
+                {
+                    yield return text;
+                    text = Console.ReadLine();
+                }
+            //}
+        }
+
+        public static bool Any<T>(this IEnumerable<T> source)
+        {
+            return source.GetEnumerator().MoveNext();
+        }
+
+        public static bool Any<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return source.Where(predicate).GetEnumerator().MoveNext();
+        }
+
     }
 }
